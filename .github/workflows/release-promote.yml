@@ -49,7 +49,8 @@ env:
 jobs:
   candidate:
     name: Verify the candidate
-    if: github.repository == 'Mesh-LLM/mesh-llm'
+    # SANDBOX: upstream allows only Mesh-LLM/mesh-llm.
+    if: github.repository == 'michaelneale/mesh-release-lab'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -283,7 +284,8 @@ jobs:
   dispatch_packaging_release:
     name: Dispatch package and image publishing
     needs: [candidate, promote]
-    if: ${{ needs.promote.result == 'success' }}
+    # SANDBOX: never dispatch to Mesh-LLM/mesh-packaging. Upstream: needs.promote.result == 'success'
+    if: ${{ false }}
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -353,7 +355,8 @@ jobs:
   await_packaging_release:
     name: Verify package and image publishing
     needs: [candidate, promote, dispatch_packaging_release]
-    if: ${{ needs.dispatch_packaging_release.result == 'success' }}
+    # SANDBOX: no packaging run to wait for. Upstream: needs.dispatch_packaging_release.result == 'success'
+    if: ${{ false }}
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     permissions:
@@ -475,7 +478,8 @@ jobs:
   publish_crates:
     name: Publish crates.io packages
     needs: [candidate, promote, publish_crates_preflight]
-    if: ${{ needs.promote.result == 'success' }}
+    # SANDBOX: never publish to crates.io. Upstream: needs.promote.result == 'success'
+    if: ${{ false }}
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/mesh-llm/mesh-llm-cuda-runner@sha256:fa696b3ce312f26b35d2193c48a89b5766be141f04f8574daca8072537569338
